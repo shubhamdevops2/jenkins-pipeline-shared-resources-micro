@@ -12,7 +12,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
         stage("Sonar: Validate"){
             sh "pwd"
             sh "ls -ltr"
-            sh "id"
+            sh "whoami"
         }
 
         //attempt to create the sonar project advance and assign qualitygate
