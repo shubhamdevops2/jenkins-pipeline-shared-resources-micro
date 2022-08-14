@@ -5,7 +5,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
     def sonarKey, sonarProps, sonarResult, sonarProjectName
     def sonarExtURL = "http://192.168.0.111:9000"
 
-    node("worker_docker_slave"){
+    node("test"){
         stage("Sonar: Checkout"){
             checkout scm
         }
