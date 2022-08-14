@@ -36,8 +36,8 @@ void call(String mavenHome, String mavenSettings, String targetPom){
                     def artifactId = pom.artifactId
                     def groupId = pom.groupId 
 
-                    sonarKey = groupId + ":" + artifactId + ":" + main
-                    sonarProjectName = artifactId + " " + main
+                    sonarKey = groupId + ":" + artifactId + ":" + "main"
+                    sonarProjectName = artifactId + " " + "main"
                     def sonarName = pom.name
 
                     def sonarQualityGateId = sonarQubeDetails.getProjectGate(artifactId)
