@@ -3,7 +3,7 @@ import org.common.SonarQubeDetails
 
 void call(String mavenHome, String mavenSettings, String targetPom){
     def sonarKey, sonarProps, sonarResult, sonarProjectName
-    def sonarExtURL = "http://192.168.0.111:9000"
+    def sonarExtURL = "http://192.168.0.106:9000"
 
     node("test"){
         stage("Sonar: Checkout"){
@@ -20,7 +20,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
             Boolean doSetup = true
 
             try{
-                withCredentials([string(credentialsId: 'Sonarqube-Token', variable: 'sonarCred')]) {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarCred')]) {
                     println "SONAR CREDENTIALS ARE READY"
                 }
             }
@@ -31,7 +31,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
             }
             
             if(doSetup){
-                withCredentials([string(credentialsId: 'Sonarqube-Token', variable: 'sonarCred')]) {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarCred')]) {
                     def pom = readMavenPom file: targetPom
                     def artifactId = pom.artifactId
                     def groupId = pom.groupId 
