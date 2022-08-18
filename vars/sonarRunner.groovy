@@ -113,7 +113,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
                 def ceTaskUrl = props['ceTaskUrl']
                 def ceTask
 
-                withCredentials([string(credentialsId: 'Sonarqube-Token', variable: 'sonarCred')]) {
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarCred')]) {
                     //Get analysisId from sonar
                     def url = new URL(ceTaskUrl)
                     echo "waiting for analysis to cpmplete...."
