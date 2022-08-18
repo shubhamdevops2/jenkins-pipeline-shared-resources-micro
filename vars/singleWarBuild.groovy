@@ -120,13 +120,13 @@ def call(body){
 
                 stage("Build Docker Image"){
                     sh "id"
-                    sh "docker build -t shubham1769/${imageTag} --file=${config.dockerFile} ."
+                    sh "docker build -t ${imageTag} --file=${config.dockerFile} ."
                 }
 
                 stage("Publish docker image"){
                     withCredentials([usernamePassword(credentialsId: 'docker credentials', passwordVariable: 'password', usernameVariable: 'username')]) {
                         sh "docker login -u ${username} -p ${password}"
-                        sh "docker push shubham1769/${imageTag}"
+                        sh "docker push ${imageTag}"
                     }
                     // withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable:'AWS_SECRET_ACCESS_KEY')]) {
                     //     def AWS_DEFAULT_REGION = "us-east-1"
