@@ -5,7 +5,7 @@ def call(body){
     body.delegate = config                          //assign the config map as delegate for the body object
     body()                                          //variables are scoped to the config map
 
-    def branch = "${env.BRANCH_NAME}"
+    def branch = "main"
     def doBuild = true
     def registryName = '182555641266.dkr.ecr.us-east-1.amazonaws.com/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
