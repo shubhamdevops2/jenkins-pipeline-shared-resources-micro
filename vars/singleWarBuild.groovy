@@ -120,16 +120,20 @@ def call(body){
 
                 stage("Build Docker Image"){
                     sh "id"
-                    sh "docker build -t ${imageTag} --file=${config.dockerFile} ."
+                    sh "docker build -t shubham1769/${imageTag} --file=${config.dockerFile} ."
                 }
 
                 stage("Publish docker image"){
-                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable:'AWS_SECRET_ACCESS_KEY')]) {
-                        def AWS_DEFAULT_REGION = "us-east-1"
-                        sh "aws --version"
-                        sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 182555641266.dkr.ecr.us-east-1.amazonaws.com"
-                        sh "docker push ${imageTag}"
+                    withCredentials([usernamePassword(credentialsId: 'docker credentials', passwordVariable: 'password', usernameVariable: 'username')]) {
+                        sh "docker login -u ${username} -p ${password}"
+                        sh "docker push shubham1769/${imageTag}"
                     }
+                    // withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable:'AWS_SECRET_ACCESS_KEY')]) {
+                    //     def AWS_DEFAULT_REGION = "us-east-1"
+                    //     sh "aws --version"
+                    //     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 182555641266.dkr.ecr.us-east-1.amazonaws.com"
+                    //     sh "docker push ${imageTag}"
+                    // }
                 }
 
                 stage("Update repo"){
