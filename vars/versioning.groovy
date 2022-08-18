@@ -1,5 +1,5 @@
 void call(Boolean ecrEnabled, String ecrRepoName, String targetPom, String branch, Boolean includeBranchName = true){
-    def registryPath = "182555641266.dkr.ecr.us-east-1.amazonaws.com/"
+    def registryPath = "shubham1769/"
     def newVersion
     def pom = readMavenPom file: targetPom
     def originalversion = pom.version

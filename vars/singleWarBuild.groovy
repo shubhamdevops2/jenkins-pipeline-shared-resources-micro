@@ -7,7 +7,7 @@ def call(body){
 
     def branch = "main"
     def doBuild = true
-    def registryName = '182555641266.dkr.ecr.us-east-1.amazonaws.com/'
+    def registryName = 'shubham1769/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
     def mavenHome = "/opt/maven/bin/mvn"
     def mavenSettings = "/opt/maven/conf/settings.xml"
