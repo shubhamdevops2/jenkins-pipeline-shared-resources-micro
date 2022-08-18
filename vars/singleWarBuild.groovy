@@ -10,7 +10,7 @@ def call(body){
     def registryName = '182555641266.dkr.ecr.us-east-1.amazonaws.com/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
     def mavenHome = "/opt/maven/bin/mvn"
-    def mavenSettings = "${env.JENKINS_HOME}/settings.xml"
+    def mavenSettings = "/opt/maven/conf/settings.xml"
 
  
     node("test"){
