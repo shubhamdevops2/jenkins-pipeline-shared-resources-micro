@@ -32,7 +32,7 @@ def call(body){
                 extensions: [[$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true, timeout: 15]],
                 userRemoteConfigs: scm.userRemoteConfigs
             ])
-            sh "git checkout ${env.BRANCH_NAME}"		     
+            sh "git checkout main"		     
         }
 
         //This stage is to stop rebuild of compenents if nothing has changes in the repo
