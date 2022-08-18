@@ -101,15 +101,15 @@ def call(body){
                 }
 
                 stage("Build & push the artifacts to Jfrog"){
-                    withCredentials([string(credentialsId: 'Jfrog', variable: 'jfrogCred')]) {
+                    withCredentials([string(credentialsId: 'jfrog', variable: 'jfrogCred')]) {
                         //sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} clean install -B org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy -DaltReleaseDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-releases/ -DaltSnapshotDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-snapshots/"
                         
-                        def server = Artifactory.server 'Jfrog'
+                        def server = Artifactory.server 'jfrog'
                         def rtMaven = Artifactory.newMavenBuild()
                         rtMaven.deployer server: server, releaseRepo: 'myapp-releases', snapshotRepo: 'myapp-snapshots'
                         env.MAVEN_HOME = "/opt/maven"
 
-                        def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /var/jenkins_home/settings.xml' 
+                        def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /opt/maven/conf/settings.xml' 
                         server.publishBuildInfo buildInfo
                     }
                 }
