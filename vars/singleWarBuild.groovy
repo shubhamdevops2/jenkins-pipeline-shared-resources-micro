@@ -9,8 +9,8 @@ def call(body){
     def doBuild = true
     def registryName = '182555641266.dkr.ecr.us-east-1.amazonaws.com/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
-    def mavenHome = "/usr/share/maven"
-    def mavenSettings = "/usr/share/maven/conf/settings.xml"
+    def mavenHome = "/opt/maven/bin/mvn"
+    def mavenSettings = "${env.JENKINS_HOME}/settings.xml"
 
  
     node("test"){
@@ -32,7 +32,7 @@ def call(body){
                 extensions: [[$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true, timeout: 15]],
                 userRemoteConfigs: scm.userRemoteConfigs
             ])
-            sh "git checkout main"		     
+            sh "git checkout ${env.BRANCH_NAME}"		     
         }
 
         //This stage is to stop rebuild of compenents if nothing has changes in the repo

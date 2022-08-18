@@ -37,8 +37,8 @@ void call(String mavenHome, String mavenSettings, String targetPom){
                     def artifactId = pom.artifactId
                     def groupId = pom.groupId 
 
-                    sonarKey = groupId + ":" + artifactId + ":" + "main"
-                    sonarProjectName = artifactId + " " + "main"
+                    sonarKey = groupId + ":" + artifactId + ":" + "${env.BRANCH_NAME}"
+                    sonarProjectName = artifactId + " " + "${env.BRANCH_NAME}"
                     def sonarName = pom.name
 
                     def sonarQualityGateId = sonarQubeDetails.getProjectGate(artifactId)
@@ -63,7 +63,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
                                 sh "curl -u ${sonarCred}: -d \"project=${sonarKey}&name=${sonarProjectName}\" ${url}"
                                 newProject = true
                             }
-                            catch(e){
+                            catch( e){
                                 println "Was unable to setup sonarProject it may already exist"
                                 println e
                             }
