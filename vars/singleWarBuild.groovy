@@ -39,7 +39,7 @@ def call(body){
         stage("Check last commit (if the build stops here there are no changes)"){
             def USER = sh(script: 'git log -1 --format=%an', returnStdout: true).trim()
             
-            if(USER == "jenknsdocker05"){
+            if(USER == "jenkins.docker"){
                 echo """####################################################### 
                             | No code change, the last change was to the version
                             | The build has been skipped to avoid the infinite loop
@@ -138,7 +138,7 @@ def call(body){
 
                 stage("Update repo"){
                     sshagent(['jenkins-github-shubhamdevops1']){
-                        sh "git config --global user.email \"jenkinsdocker05@gmail.com\" && git config --global user.name \"jenknsdocker05\" && \
+                        sh "git config --global user.email \"jjenkins.docker@gmail.com\" && git config --global user.name \"jenkins.docker\" && \
                             git commit -am '[JENKINS] Built version ${releaseVersion}' && git push origin main"
                     }    
                 }
