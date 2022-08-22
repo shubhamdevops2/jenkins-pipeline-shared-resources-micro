@@ -137,7 +137,7 @@ def call(body){
                 }
 
                 stage("Update repo"){
-                    sshagent(['jenkins-docker-github-cred']){
+                    sshagent(['jenkins-github-jenkinsdocker05']){
                         sh "git config --global user.email \"jenkinsdocker05@gmail.com\" && git config --global user.name \"jenknsdocker05\" && \
                             git commit -am '[JENKINS] Built version ${releaseVersion}' && git push"
                     }    
