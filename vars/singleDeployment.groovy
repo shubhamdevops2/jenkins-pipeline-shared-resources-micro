@@ -3,8 +3,8 @@ void call(String deployRepoURL, String envcongTag, String repoName, String globa
     node("worker_docker_slave"){
         stage('checkout'){
             checkout scm: [$class: 'GitSCM',
-                            branches: [[name: "master"]],
-                            userRemoteConfigs: [[credentialsId: 'BitbucketSSH', url: deployRepoURL]]
+                            branches: [[name: "main"]],
+                            userRemoteConfigs: [[credentialsId: 'github-cred-with-username', url: deployRepoURL]]
             ]
         }
         stage('Chart Linting'){
