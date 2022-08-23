@@ -38,6 +38,7 @@ def call(body){
         //This stage is to stop rebuild of compenents if nothing has changes in the repo
         stage("Check last commit (if the build stops here there are no changes)"){
             def USER = sh(script: 'git log -1 --format=%an', returnStdout: true).trim()
+            sh 'git log -1 --format=%an'
             
             if(USER == "jenkins.docker"){
                 echo """####################################################### 
