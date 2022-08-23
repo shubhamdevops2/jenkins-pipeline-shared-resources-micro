@@ -19,9 +19,9 @@ def call(body){
     def dockerImagePathList = []
     def buildVersion = 0
     def pipelineVars
-    def deployRepoURL = "git@bitbucket.org:shubham_devops_cloud/${repoName}.git"
+    def deployRepoURL = "git@github.com:shubhamdevops1/${repoName}.git"
     
-    node("worker_docker_slave"){
+    node("test"){
 
         tagsCaptured = validateImage(tagPattern, featureimage)
 
@@ -53,8 +53,8 @@ def call(body){
 
         stage("checkout scm"){
             checkout scm: [$class: 'GitSCM',
-                            branches: [[name: "master"]],
-                            userRemoteConfigs: [[credentialsId: 'BitbucketSSH', url: deployRepoURL]]
+                            branches: [[name: "main"]],
+                            userRemoteConfigs: [[credentialsId: 'github-cred-with-username', url: deployRepoURL]]
             ]    
         }
 
@@ -83,7 +83,7 @@ def call(body){
                     }
                 }
 
-                pipelineVars = singleDeployment(deployRepoURL, envconfigTag, repoName, "master")
+                pipelineVars = singleDeployment(deployRepoURL, envconfigTag, repoName, "main")
                 println "INit: ${pipelineVars}"
             }
             catch(Exception e){
