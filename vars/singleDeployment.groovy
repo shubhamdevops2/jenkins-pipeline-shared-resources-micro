@@ -1,6 +1,6 @@
 void call(String deployRepoURL, String envcongTag, String repoName, String globalenvconfigTag){
     
-    node("worker_docker_slave"){
+    node("kube-master"){
         stage('checkout'){
             checkout scm: [$class: 'GitSCM',
                             branches: [[name: "main"]],
