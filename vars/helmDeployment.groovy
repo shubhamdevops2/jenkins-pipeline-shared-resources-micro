@@ -14,8 +14,8 @@ def call(body){
     def tagsCaptured = ""
     def findImagePath = ""
     def newyaml = ""
-    //def tagPattern = /[a-zA-Z0-9-]{9}\.[a-zA-Z-.\/]{2,}\:[0-9a-zA-Z._-]{2,}/
-    def tagPattern = /w{7}\d{4}\w{5}:(?:\d\.){2}\d{2}\-\d\d(?:\d{2}\-){6}\w{4}/
+    //def tagPattern = /[0-9]{12}\.[a-z]{3}\.[a-z]{3}\.[a-zA-Z0-9-]{9}\.[a-zA-Z-.\/]{2,}\:[0-9a-zA-Z._-]{2,}/
+    def tagPattern = /[a-zA-Z0-9-]{11}[a-zA-Z-.\/]{2,}\:[0-9a-zA-Z._-]{2,}/
     def deployImageList = []
     def dockerImagePathList = []
     def buildVersion = 0
