@@ -17,8 +17,8 @@ void call(String deployRepoURL, String envcongTag, String repoName, String globa
         }
         stage('Deploying application on k8s'){
             withCredentials([kubeconfigContent(credentialsId: 'KUBE-CONFIG', variable: 'KUBECONFIG_CONTENT')]) {
-                dir("charts"){
-                    sh "helm upgrade --install --namespace ${envcongTag} example --debug --timeout 900s --wait" 
+                dir("charts/ipt-code/"){
+                    sh "helm upgrade --install --namespace ${envcongTag} ipt-code-svc ./ipt-code-svc --debug --timeout 900s --wait" 
                 }
             }
         }
