@@ -9,7 +9,7 @@ void call(String deployRepoURL, String envcongTag, String repoName, String globa
         }
         stage('Chart Linting'){
             withCredentials([kubeconfigContent(credentialsId: 'KUBE-CONFIG', variable: 'KUBECONFIG_CONTENT')]) {
-                dir("charts/ipt-code/ipd-code-svc"){
+                dir("charts/ipt-code/ipt-code-svc"){
                     sh 'ls -la'
                     sh "helm lint ."        
                 }
