@@ -77,14 +77,19 @@ def call(body){
                             sh "git add ${dockerImagePath}"
 
                             sh "cat ${dockerImagePath}"
-                            sh "git commit -m 'sdsds' "
-                            sh "git push -f origin master"
                         }
                     }
                     else{
                         echo "Could not find docker.app.yaml for " + dockerimage
                         sh("exit 1")
                     }
+                }
+
+                stage("Update repo"){
+                    sshagent(['github-cred-with-username']){
+                        sh "git config --global user.email \"shubham.devops.1@gmail.com\" && git config --global user.name \"shubham1769\" && \
+                            git commit -am 'pushes docker image - ${dockerImagePath}' && git push -f origin main"
+                    }    
                 }
 
                 pipelineVars = singleDeployment(deployRepoURL, envconfigTag, repoName, "main")
