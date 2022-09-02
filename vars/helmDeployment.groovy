@@ -77,8 +77,10 @@ def call(body){
                             sh "git add ${dockerImagePath}"
 
                             sh "cat ${dockerImagePath}"
-                            echo (sh "ls -la")
-                            echo (sh "pwd")   
+                            sh '''
+                            pwd
+                            ls -la
+                            '''
 
                         }
                     }
