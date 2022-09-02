@@ -77,6 +77,8 @@ def call(body){
                             sh "git add ${dockerImagePath}"
 
                             sh "cat ${dockerImagePath}"
+                            sh "git commit -m 'sdsds' "
+                            sh "git push"
                         }
                     }
                     else{
