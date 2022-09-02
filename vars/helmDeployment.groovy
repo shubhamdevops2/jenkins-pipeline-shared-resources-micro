@@ -77,10 +77,13 @@ def call(body){
                             sh "git add ${dockerImagePath}"
 
                             sh "cat ${dockerImagePath}"
+                            echo (sh "ls -la")
+                            echo (sh "pwd")   
+
                         }
                     }
                     else{
-                        echo "Could not find docker.app.yaml for " + dockerimage
+                        echo "Could not find values.yaml for " + dockerimage
                         sh("exit 1")
                     }
                 }
