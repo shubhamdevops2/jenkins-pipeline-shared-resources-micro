@@ -24,6 +24,7 @@ def call(body){
     
     node("test"){
 
+        
         tagsCaptured = validateImage(tagPattern, featureimage)
 
         if(!tagsCaptured.trim()){
