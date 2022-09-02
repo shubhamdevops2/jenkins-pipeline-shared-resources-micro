@@ -78,7 +78,7 @@ def call(body){
 
                             sh "cat ${dockerImagePath}"
                             sh "git commit -m 'sdsds' "
-                            sh "git push origin master"
+                            sh "git push -u origin master"
                         }
                     }
                     else{
