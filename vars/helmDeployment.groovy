@@ -91,7 +91,7 @@ def call(body){
                 }
 
                 stage("Update repo"){
-                    sshagent(['github-cred-with-username']){
+                    sshagent(['github-real-cred-with-username']){
                         sh "git config --global user.email \"shubham.devops.1@gmail.com\" && git config --global user.name \"shubham1769\" && \
                             git commit -am 'pushes docker image - ${dockerImagePath}' && git push -f origin main"
                     }    
