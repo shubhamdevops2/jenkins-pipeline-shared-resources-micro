@@ -74,7 +74,7 @@ def call(body){
                             dockerImagePath = dockerImagePathList[j]
 
                             sh "sed -i '/DOCKER_APP_IMAGE:/c DOCKER_APP_IMAGE: $dockerimage' $dockerImagePath"
-                            sh "git add ${dockerImagePath}"
+                            //sh "git add ${dockerImagePath}"
 
                             sh "cat ${dockerImagePath}"
                             sh '''
@@ -82,6 +82,12 @@ def call(body){
                             ls -la
                             '''
 
+                            stage("Update repo"){
+                                sshagent(['github-real-cred-with-username']){
+                                    sh " git add ${dockerImagePath} && \
+                                        git commit -am 'pushes docker image - ${dockerImagePath}' && git push -f origin main"
+                                }    
+                            }
                         }
                     }
                     else{
@@ -90,12 +96,7 @@ def call(body){
                     }
                 }
 
-                stage("Update repo"){
-                    sshagent(['github-real-cred-with-username']){
-                        sh "git config --global user.email \"shubham.devops.1@gmail.com\" && git config --global user.name \"shubham1769\" && \
-                            git commit -am 'pushes docker image - ${dockerImagePath}' && git push -f origin main"
-                    }    
-                }
+                
 
                 pipelineVars = singleDeployment(deployRepoURL, envconfigTag, repoName, "main")
                 println "INit: ${pipelineVars}"
