@@ -89,7 +89,8 @@ def call(body){
                                     sh """ 
                                         git add ${dockerImagePath} 
                                         git commit -m "pushes docker image - ${dockerImagePath}"
-                                        git push -f origin main"""
+                                        git push -f origin \main\
+                                        """
                                 }    
                             }
                         }
