@@ -53,10 +53,7 @@ def call(body){
         }
         println newyaml
 
-        sh '''
-        mkdir ipt-charts-code
-        cd ipt-charts-code
-        '''
+         
 
         stage("checkout scm"){
             checkout scm: [$class: 'GitSCM',
@@ -89,8 +86,8 @@ def call(body){
 
                             stage("Update repo"){
                                 sshagent(['github-real-cred-with-username']){
-                                    sh " git add ${dockerImagePath} && \
-                                        git commit -am 'pushes docker image - ${dockerImagePath}' && git push -f origin main"
+                                    sh """ git add ${dockerImagePath} 
+                                        git commit -m "pushes docker image - ${dockerImagePath}" && git push -f origin main"""
                                 }    
                             }
                         }
