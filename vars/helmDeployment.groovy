@@ -86,8 +86,10 @@ def call(body){
 
                             stage("Update repo"){
                                 sshagent(['github-real-cred-with-username']){
-                                    sh """ git add ${dockerImagePath} 
-                                        git commit -m "pushes docker image - ${dockerImagePath}" && git push -f origin main"""
+                                    sh """ 
+                                        git add ${dockerImagePath} 
+                                        git commit -m "pushes docker image - ${dockerImagePath}"
+                                        git push -f origin main"""
                                 }    
                             }
                         }
