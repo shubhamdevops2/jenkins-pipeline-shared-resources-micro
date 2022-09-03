@@ -53,6 +53,11 @@ def call(body){
         }
         println newyaml
 
+        sh '''
+        mkdir ipt-charts-code
+        cd ipt-charts-code
+        '''
+
         stage("checkout scm"){
             checkout scm: [$class: 'GitSCM',
                             branches: [[name: "main"]],
