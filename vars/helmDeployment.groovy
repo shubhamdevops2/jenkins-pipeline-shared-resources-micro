@@ -67,6 +67,8 @@ def call(body){
                 for(int i = 0; i < deployImageList.size(); i++){
                     dockerimage = deployImageList[i]
                     echo "dockerimage : " + dockerimage
+                    sh 'pwd'
+                    sh 'ls -l'
                     dockerImagePath = sh(script: "grep -ril \$(echo $dockerimage | sed 's/:.*//') ./", returnStdout: true).trim()
                     echo "dockerImagePath : " + dockerImagePath
                     dockerImagePathList = dockerImagePath.split("\n")
