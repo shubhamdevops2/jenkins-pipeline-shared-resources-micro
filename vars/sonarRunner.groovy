@@ -108,13 +108,9 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                         -D sonar.projectVersion=${sonarVersion} \
                         -D sonar.sources=. \
                         -D sonar.exclusions=*/node-modules/** \
-                        -D sonar.scanner.dumpToFile=file.txt \
-                        -D sonar.host.url=http://192.168.0.106:9000/ \
-                        -D sonar.login=da10fc86448a90cc09f561c3aeb8d66c405b32e6 \
-                        -D sonar.sourceEncoding=UTF-8
+                        -D sonar.scanner.dumpToFile=file.txt
                         
                     """
-
                 }
             }
 
