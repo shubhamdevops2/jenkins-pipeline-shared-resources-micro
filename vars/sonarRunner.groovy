@@ -106,7 +106,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                         -D sonar.projectKey=1.0.0:main \
                         -D sonar.projectName="display 1.0.0 main" \
                         -D sonar.projectVersion=1.0.0 \
-                        -D sonar.sources=. \
+                        -D sonar.sources=public \
                         -D sonar.exclusions=*/node-modules/** \
                         -D sonar.scanner.dumpToFile=file.txt
                         
