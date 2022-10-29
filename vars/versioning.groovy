@@ -1,9 +1,9 @@
-void call(Boolean ecrEnabled, String ecrRepoName, String targetPom, String branch, Boolean includeBranchName = true){
-    def registryPath = "shubham1769/"
+void call(Boolean ecrEnabled, String ecrRepoName, String targetFile, String branch, Boolean includeBranchName = true){
+    def registryPath = "shubhamdevops2/"
     def newVersion
-    def pom = readMavenPom file: targetPom
-    def originalversion = pom.version
-    def baseVersion = pom.version.replaceAll(/-[a-zA-Z0-9\/_]+-*[a-zA-Z0-9_]*-*[a-zA-Z0-9_]*-*[a-zA-Z0-9_]*/, '')
+    def node = readJSON file: targetFile
+    def originalversion = node.version
+    def baseVersion = node.version.replaceAll(/-[a-zA-Z0-9\/_]+-*[a-zA-Z0-9_]*-*[a-zA-Z0-9_]*-*[a-zA-Z0-9_]*/, '')
     
     def releaseVersion = "${baseVersion}"
     def majorVersion = baseVersion.split("\\.", -1)[0]
@@ -12,7 +12,7 @@ void call(Boolean ecrEnabled, String ecrRepoName, String targetPom, String branc
 
     echo "build version is: $buildVersion"
     buildVersion = buildVersion.toInteger() + 1
-    def newPomVersion = "${majorVersion}.${minorVersion}.${buildVersion}-SNAPSHOT"
+    def newPomVersion = "${majorVersion}.${minorVersion}.${buildVersion}"
 
     def artifactId = ecrRepoName.toLowerCase()
     def timestamp = new Date().format("yyyy-MM-dd-HH-mm-ss", TimeZone.getTimeZone('IST'))
@@ -24,9 +24,9 @@ void call(Boolean ecrEnabled, String ecrRepoName, String targetPom, String branc
             |############# Version Details #############
             |##########################################
             |Compenent is : ${artifactId}
-            |Current POM version : ${originalversion}
+            |Current Artiactory version : ${originalversion}
             |Release version to be : ${releaseVersion}
-            |New POM version : ${newPomVersion}
+            |New Artiactory version : ${newPomVersion}
             |Docker Image will be : ${imageTag}
             |##########################################""".stripMargin()
 

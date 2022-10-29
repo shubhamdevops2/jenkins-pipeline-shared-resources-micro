@@ -7,10 +7,10 @@ def call(body){
 
     def branch = "main"
     def doBuild = true
-    def registryName = 'shubham1769/'
+    def registryName = 'shubhamdevops2/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
-    def mavenHome = "/opt/maven/bin/mvn"
-    def mavenSettings = "/opt/maven/conf/settings.xml"
+    def npmHome = "/usr/share/npm"
+    //def mavenSettings = "/opt/maven/conf/settings.xml"
 
  
     node("test"){
@@ -32,7 +32,7 @@ def call(body){
                 extensions: [[$class: 'CloneOption', depth: 1, noTags: false, reference: '', shallow: true, timeout: 15]],
                 userRemoteConfigs: scm.userRemoteConfigs
             ])
-            sh "git checkout "		     
+            //sh "git checkout "		     
         }
 
         //This stage is to stop rebuild of compenents if nothing has changes in the repo
@@ -72,7 +72,7 @@ def call(body){
                 //call versioning and work on next maven version
                 stage("Get Version Details"){
                     def versionArray
-                    versionArray = versioning(true, ecrRepoName, config.targetPom, branch)
+                    versionArray = versioning(true, ecrRepoName, config.targetFile, branch)
                     
                     originalversion = versionArray[0]
                     releaseVersion = versionArray[1]
@@ -82,11 +82,11 @@ def call(body){
                 }
 
                 stage("SONAR : This will trigger next 4 stages"){
-                    sonarProps = sonarRunner(mavenHome, mavenSettings, config.targetPom)
+                    sonarProps = sonarRunner(npmHome, config.targetFile,releaseVersion)
                     sonarResult = sonarProps['sonarResult']
                 }
 
-                stage("Maven Results aggregation"){
+                stage("Node Results aggregation"){
                     echo "Sonar Result: ${sonarResult}"
 
                     if( sonarResult == "failure" ){
@@ -97,26 +97,33 @@ def call(body){
                     }
                 }
 
-                stage("Versioning - remove Snapshot"){
-                    sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} org.codehaus.mojo:versions-maven-plugin:2.3:set -DnewVersion='${releaseVersion}' -B"
+                stage("Versioning - creating the package"){
+                    sh "npm pack"
                 }
 
                 stage("Build & push the artifacts to Jfrog"){
                     withCredentials([string(credentialsId: 'jfrog', variable: 'jfrogCred')]) {
-                        //sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} clean install -B org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy -DaltReleaseDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-releases/ -DaltSnapshotDeploymentRepository=Jfrog::default::https://shubhamdevopscloud.jfrog.io/artifactory/myapp-snapshots/"
-                        
+                        def uploadSpec = """{
+                        "files": [
+                            {
+                            "pattern": "${ecrRepoName}-${releaseVersion}.tgz",
+                            "target": "micro-npm-local/${ecrRepoName}/${ecrRepoName}-${releaseVersion}.tgz"
+                            }
+                        ]
+                        }"""
                         def server = Artifactory.server 'jfrog'
-                        def rtMaven = Artifactory.newMavenBuild()
-                        rtMaven.deployer server: server, releaseRepo: 'myapp-releases', snapshotRepo: 'myapp-snapshots'
-                        env.MAVEN_HOME = "/opt/maven"
-
-                        def buildInfo = rtMaven.run pom: 'pom.xml', goals: 'clean install -gs /opt/maven/conf/settings.xml' 
+                        def buildInfo = Artifactory.newBuildInfo()
+                        buildInfo.env.collect()
+                        server.upload spec: uploadSpec, buildInfo: buildInfo
                         server.publishBuildInfo buildInfo
                     }
                 }
 
                 stage("Versioning - updating to new release"){
-                    sh "${mavenHome} -f ${config.targetPom} -gs ${mavenSettings} org.codehaus.mojo:versions-maven-plugin:2.3:set -DnewVersion='${newPomVersion}' -B"
+                    sh """
+                    sed -i 's/"version": "${releaseVersion}"/"version": "${newPomVersion}"/g' package.json
+                    cat package.json
+                    """
                 }
 
                 stage("Build Docker Image"){
@@ -125,20 +132,21 @@ def call(body){
                 }
 
                 stage("Publish docker image"){
-                    withCredentials([usernamePassword(credentialsId: 'docker credentials', passwordVariable: 'password', usernameVariable: 'username')]) {
+                    withCredentials([usernamePassword(credentialsId: 'docker-cred-shubhamdevops2', passwordVariable: 'password', usernameVariable: 'username')]) {
                         sh "docker login -u ${username} -p ${password}"
                         sh "docker push ${imageTag}"
                     }
-                    // withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'AWS', secretKeyVariable:'AWS_SECRET_ACCESS_KEY')]) {
-                    //     def AWS_DEFAULT_REGION = "us-east-1"
-                    //     sh "aws --version"
-                    //     sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 182555641266.dkr.ecr.us-east-1.amazonaws.com"
-                    //     sh "docker push ${imageTag}"
-                    // }
+
+                }
+
+                stage("deleting the artifactory and docker image to keep the space")
+                {
+                    sh "docker rmi ${imageTag}"
+                    sh "rm nodejs-usermanagement-${releaseVersion}.tgz"
                 }
 
                 stage("Update repo"){
-                    sshagent(['github-cred-with-username']){
+                    sshagent(['shubhamdevops2']){
                         sh "git config --global user.email \"jenkins.docker@gmail.com\" && git config --global user.name \"jenkins.docker\" && \
                             git commit -am '[JENKINS] Built version ${releaseVersion}' && git push -f origin HEAD:main"
                     }    

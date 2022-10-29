@@ -1,8 +1,11 @@
 import groovy.json.JsonBuilder;
 import org.common.SonarQubeDetails
 
-void call(String mavenHome, String mavenSettings, String targetPom){
-    def sonarKey, sonarProps, sonarResult, sonarProjectName
+void call(String mavenHome, String targetFile,String releaseVersion){
+    def sonarKey, sonarProps, sonarResult, sonarProjectName,sonarVersion
+    def scannerHome = "/opt/sonar-scanner/bin"
+
+    sonarVersion = releaseVersion
     def sonarExtURL = "http://192.168.0.106:9000"
 
     node("test"){
@@ -33,16 +36,15 @@ void call(String mavenHome, String mavenSettings, String targetPom){
             
             if(doSetup){
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'sonarCred')]) {
-                    def pom = readMavenPom file: targetPom
-                    def artifactId = pom.artifactId
-                    def groupId = pom.groupId 
+                    def node = readJSON file: targetFile
+                    def artifactId = node.version
 
-                    sonarKey = groupId + ":" + artifactId + ":" + "main"
-                    sonarProjectName = artifactId + " " + "main"
-                    def sonarName = pom.name
+                    sonarKey = artifactId + ":" + "main"
+                    sonarProjectName = node.name + " " +artifactId + " " + "main"
+                    def sonarName = node.name
 
                     def sonarQualityGateId = sonarQubeDetails.getProjectGate(artifactId)
-                    def defaultQualityGateId = sonarQubeDetails.getProjectGate("default")
+                    //def defaultQualityGateId = sonarQubeDetails.getProjectGate("default")
                     def url
                     Boolean newProject = false
 
@@ -95,9 +97,26 @@ void call(String mavenHome, String mavenSettings, String targetPom){
 
         try{
             stage("Sonar: Analysis"){
+                // environment {
+                //     scannerHome = tool 'sonarqube'
+                // }
                 withSonarQubeEnv('sonarqube'){
-                    sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report-aggregate org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
+                    //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report-aggregate org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
                     //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean install sonar:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
+
+
+                    //sh "npm run coverage-lcov"
+                    sh """
+                        ${scannerHome}/sonar-scanner \
+                        -D sonar.projectKey=${sonarKey} \
+                        -D sonar.projectName=\"${sonarProjectName}\" \
+                        -D sonar.projectVersion=${sonarVersion} \
+                        -D sonar.sources=. \
+                        -D sonar.exclusions=*/node-modules/** \
+                        -D sonar.scanner.dumpToFile=file.txt
+                        
+                    """
+
                 }
             }
 
@@ -107,8 +126,8 @@ void call(String mavenHome, String mavenSettings, String targetPom){
                 println currentPath*/
 
                 //Get the report task written by sonar with taskID
-                def props = readProperties file: 'target/sonar/report-task.txt'
-                sh "cat target/sonar/report-task.txt"
+                def props = readProperties file: '.scannerwork/report-task.txt'
+                sh "cat .scannerwork/report-task.txt"
                 def sonarServerUrl = props['serverUrl']
                 def ceTaskUrl = props['ceTaskUrl']
                 def ceTask
@@ -135,6 +154,7 @@ void call(String mavenHome, String mavenSettings, String targetPom){
                     url = new URL(sonarServerUrl + "/api/qualitygates/project_status?analysisId=" + analysisId)
                     sh "curl -u ${sonarCred}: ${url} -o qualityGate.json"
                     def qgProps = readJSON file: "qualityGate.json"
+                    sh "cat qualityGate.json"
                     def qualitygate = qgProps['projectStatus']['status']
 
                     if(qualitygate == "OK" || qualitygate == "WARN"){
