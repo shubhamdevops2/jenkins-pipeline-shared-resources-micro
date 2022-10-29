@@ -69,7 +69,7 @@ def call(body){
                     echo "dockerimage : " + dockerimage
                     sh 'pwd'
                     sh 'ls -l'
-                    dockerImagePath = sh(script: "grep -ril \$(echo $dockerimage | sed 's/:.*//') ./charts", returnStdout: true).trim()
+                    dockerImagePath = sh(script: "grep -ril -A4 \$(echo $dockerimage | sed 's/:.*//') ./charts", returnStdout: true).trim()
                     echo "dockerImagePath : " + dockerImagePath
                     dockerImagePathList = dockerImagePath.split("\n")
 
