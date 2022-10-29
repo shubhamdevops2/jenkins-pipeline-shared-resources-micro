@@ -20,7 +20,7 @@ def call(body){
     def dockerImagePathList = []
     def buildVersion = 0
     def pipelineVars
-    def deployRepoURL = "git@github.com:shubhamdevops1/${repoName}.git"
+    def deployRepoURL = "git@github.com:shubhamdevops2/${repoName}.git"
     
     node("test"){
 
