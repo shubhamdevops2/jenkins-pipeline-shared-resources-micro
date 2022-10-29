@@ -39,7 +39,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                     def node = readJSON file: targetFile
                     def artifactId = node.version
 
-                    sonarKey = artifactId + ":" + "main"
+                    sonarKey = node.name + ":" + artifactId + ":" + "main"
                     sonarProjectName = node.name + " " +artifactId + " " + "main"
                     def sonarName = node.name
 
@@ -97,15 +97,8 @@ void call(String mavenHome, String targetFile,String releaseVersion){
 
         try{
             stage("Sonar: Analysis"){
-                // environment {
-                //     scannerHome = tool 'sonarqube'
-                // }
+
                 withSonarQubeEnv('sonarqube'){
-                    //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean org.jacoco:jacoco-maven-plugin:prepare-agent install org.jacoco:jacoco-maven-plugin:report-aggregate org.jacoco:jacoco-maven-plugin:report org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
-                    //sh "${mavenHome} -f ${targetPom} -gs ${mavenSettings} clean install sonar:sonar -Dsonar.projectKey=${sonarKey} -Dsonar.projectName=\"${sonarProjectName}\" -B"
-
-
-                    //sh "npm run coverage-lcov"
                     sh """
                         ${scannerHome}/sonar-scanner \
                         -D sonar.projectKey=${sonarKey} \
