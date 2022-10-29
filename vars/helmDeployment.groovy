@@ -21,6 +21,7 @@ def call(body){
     def buildVersion = 0
     def pipelineVars
     def deployRepoURL = "git@github.com:shubhamdevops2/${repoName}.git"
+    def chartname = CHARTNAME
     
     node("test"){
 
@@ -105,7 +106,7 @@ def call(body){
 
                 
 
-                pipelineVars = singleDeployment(deployRepoURL, envconfigTag, repoName, "main")
+                pipelineVars = singleDeployment(deployRepoURL, envconfigTag, repoName,chartname, "main")
                 println "INit: ${pipelineVars}"
             }
             catch(Exception e){

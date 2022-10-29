@@ -1,4 +1,4 @@
-void call(String deployRepoURL, String envcongTag, String repoName, String globalenvconfigTag){
+void call(String deployRepoURL, String envcongTag, String repoName,String chartname, String globalenvconfigTag){
     
     node("kube-master"){
         stage('checkout'){
@@ -19,7 +19,7 @@ void call(String deployRepoURL, String envcongTag, String repoName, String globa
         stage('Deploying application on k8s'){
             withCredentials([kubeconfigContent(credentialsId: 'KUBE-CONFIG', variable: 'KUBECONFIG_CONTENT')]) {
                 dir("charts/"){
-                    sh "helm upgrade --install --namespace ${envcongTag} ${repoName} . --debug --timeout 900s --wait" 
+                    sh "helm upgrade --install --namespace ${envcongTag} ${chartname} . --debug --timeout 900s --wait" 
                 }
             }
         }
