@@ -98,6 +98,8 @@ void call(String mavenHome, String targetFile,String releaseVersion){
         try{
             stage("Sonar: Analysis"){
 
+                sh "npm install"
+
                 withSonarQubeEnv('sonarqube'){
                     sh """
                         ${scannerHome}/sonar-scanner \
