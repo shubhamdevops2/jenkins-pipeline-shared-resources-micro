@@ -108,7 +108,8 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                         -D sonar.projectVersion=1.0.0 \
                         -D sonar.sources=. \
                         -D sonar.exclusions=*/node-modules/** \
-                        -D sonar.scanner.dumpToFile=file.txt
+                        -D sonar.scanner.dumpToFile=file.txt \
+                        -D sonar.analysis.mode=publish
                         
                     """
                 }
