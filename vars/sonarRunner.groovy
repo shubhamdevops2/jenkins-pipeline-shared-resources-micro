@@ -103,9 +103,9 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                 withSonarQubeEnv('sonarqube'){
                     sh """
                         ${scannerHome}/sonar-scanner \
-                        -D sonar.projectKey=${sonarKey} \
-                        -D sonar.projectName=\"${sonarProjectName}\" \
-                        -D sonar.projectVersion=${sonarVersion} \
+                        -D sonar.projectKey=1.0.0:main \
+                        -D sonar.projectName="display 1.0.0 main" \
+                        -D sonar.projectVersion=1.0.0 \
                         -D sonar.sources=. \
                         -D sonar.exclusions=*/node-modules/** \
                         -D sonar.scanner.dumpToFile=file.txt
