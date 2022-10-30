@@ -128,7 +128,7 @@ def call(body){
 
                 stage("Build Docker Image"){
                     sh "id"
-                    sh "rm -rf node_modules/ "
+                    // sh "rm -rf node_modules/ "
                     sh "docker build  . -t ${ecrRepoName}:latest"
                     sh "docker tag ${ecrRepoName}:latest ${imageTag}"
                 }
