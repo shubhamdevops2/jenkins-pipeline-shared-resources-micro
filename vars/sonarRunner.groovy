@@ -39,7 +39,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
                     def node = readJSON file: targetFile
                     def artifactId = node.version
 
-                    sonarKey = artifactId + ":" + "main"
+                    sonarKey = node.name+":"+artifactId + ":" + "main"
                     sonarProjectName = node.name + " " +artifactId + " " + "main"
                     def sonarName = node.name
 
