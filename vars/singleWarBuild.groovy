@@ -145,7 +145,7 @@ def call(body){
                 {
                     sh "docker rmi -f ${imageTag}"
                     sh "docker rmi -f ${ecrRepoName}:latest"
-                    sh "rm ${ecrRepoName}-*.tgz"
+                    sh "rm ${ecrRepoName}*.tgz"
                 }
 
                 stage("Update repo"){
