@@ -1,15 +1,6 @@
 {
     "qualityGates": [
-        {
-            "qualityGateID": "AX-hWYjHxlfPm-SEg9y3",
-            "qualityGateName": "Sonar way",
-            "components": {
-                "enforced": [],
-                "advisory": [ 
-                    "default" 
-                ]
-            }
-        },
+        
         {
             "qualityGateID": "AYQntPnC4OLUSOsetaKg",
             "qualityGateName": "test",

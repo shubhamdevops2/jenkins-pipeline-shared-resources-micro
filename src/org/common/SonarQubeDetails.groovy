@@ -7,8 +7,8 @@ def getProjectGate(artifactId){
     def finalGate = getQualityGateFromSource(artifactId)
 
     if(finalGate == null){
-        println "No quality gate for ${artifactId} qualityGateDefaults.json...Getting deafault"
-        finalGate = getQualityGateFromSource("default")
+        println "No quality gate for ${artifactId} qualityGateDefaults.json...Please specify the correct qualitygate"
+        //finalGate = getQualityGateFromSource("default")
     }
     return finalGate
 }
