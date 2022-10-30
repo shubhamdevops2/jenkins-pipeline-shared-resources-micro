@@ -1,5 +1,15 @@
 {
     "qualityGates": [
+        {
+            "qualityGateID": "AYQntPnC4OLUSOsetaKg",
+            "qualityGateName": "test",
+            "components": {
+                "enforced": [],
+                "advisory": [ 
+                    "default" 
+                ]
+            }
+        },
         
         {
             "qualityGateID": "AYQntPnC4OLUSOsetaKg",
