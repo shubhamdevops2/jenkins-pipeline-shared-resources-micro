@@ -11,12 +11,12 @@
             }
         },
         {
-            "qualityGateID": "AX-hN4ByxlfPm-SEg4cT",
-            "qualityGateName": "1. MyApp Quality Gate (90% Coverage)",
+            "qualityGateID": "AYQntPnC4OLUSOsetaKg",
+            "qualityGateName": "test",
             "components": {
                 "enforced": [],
                 "advisory": [ 
-                    "myapp" 
+                    "test" 
                 ]
             }
         }

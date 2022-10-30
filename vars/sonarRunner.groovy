@@ -98,7 +98,7 @@ void call(String mavenHome, String targetFile,String releaseVersion){
         try{
             stage("Sonar: Analysis"){
                 withSonarQubeEnv('sonarqube'){                    
-                    sh """
+                    sh """  
                         ${scannerHome}/sonar-scanner \
                         -D sonar.projectKey=${sonarKey} \
                         -D sonar.projectName=\"${sonarProjectName}\" \
