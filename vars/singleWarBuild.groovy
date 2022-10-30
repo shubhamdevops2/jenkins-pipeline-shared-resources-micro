@@ -128,7 +128,8 @@ def call(body){
 
                 stage("Build Docker Image"){
                     sh "id"
-                    sh "docker build -t ${imageTag} --file=${config.dockerFile} ."
+                    sh "docker build  . -t ${ecrRepoName}:latest"
+                    sh "docker tag ${ecrRepoName}:latest ${imageTag}"
                 }
 
                 stage("Publish docker image"){
@@ -141,7 +142,8 @@ def call(body){
 
                 stage("deleting the artifactory and docker image to keep the space")
                 {
-                    sh "docker rmi ${imageTag}"
+                    sh "docker rmi -f ${imageTag}"
+                    sh "docker rmi -f ${ecrRepoName}:latest"
                     sh "rm ${ecrRepoName}-*.tgz"
                 }
 
