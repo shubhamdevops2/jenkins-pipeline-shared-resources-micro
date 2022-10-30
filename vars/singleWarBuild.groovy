@@ -142,7 +142,7 @@ def call(body){
                 stage("deleting the artifactory and docker image to keep the space")
                 {
                     sh "docker rmi ${imageTag}"
-                    sh "rm nodejs-usermanagement-${releaseVersion}.tgz"
+                    sh "rm ${ecrRepoName}-${releaseVersion}.tgz"
                 }
 
                 stage("Update repo"){
