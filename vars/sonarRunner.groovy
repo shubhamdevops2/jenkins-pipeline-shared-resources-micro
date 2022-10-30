@@ -97,19 +97,11 @@ void call(String mavenHome, String targetFile,String releaseVersion){
 
         try{
             stage("Sonar: Analysis"){
-                withSonarQubeEnv('sonarqube'){
-                    sh "npm install"
-                    // nodejs(nodeJSInstallationName: 'nodejs')
-                    // {
+                sh "npm install"
+                withSonarQubeEnv('sonarqube'){                    
+                   sh """
+                        ${scannerHome}/sonar-scanner
                         
-                    //     sh "npm install sonar-scanner"
-                    //     sh "npm run sonar"
-
-                    // }
-                    
-                    sh """
-                        npm install sonar-scanner
-                        npm run sonar
                     """
                 }
             }
