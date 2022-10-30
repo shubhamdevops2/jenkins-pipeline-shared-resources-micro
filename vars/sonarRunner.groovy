@@ -99,8 +99,13 @@ void call(String mavenHome, String targetFile,String releaseVersion){
             stage("Sonar: Analysis"){
                 sh "npm install"
                 withSonarQubeEnv('sonarqube'){                    
-                   sh """
-                        ${scannerHome}/sonar-scanner
+                    sh """
+                        ${scannerHome}/sonar-scanner \
+                        -D sonar.projectKey=${sonarKey} \
+                        -D sonar.projectName=\"${sonarProjectName}\" \
+                        -D sonar.projectVersion=${sonarVersion} \
+                        -D sonar.sources=. \
+                        -D sonar.exclusions=*/node-modules/** \
                         
                     """
                 }
