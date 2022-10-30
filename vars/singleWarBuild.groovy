@@ -9,7 +9,7 @@ def call(body){
     def doBuild = true
     def registryName = 'shubhamdevops2/'
     def originalversion, releaseVersion, newPomVersion, sonarProps, sonarResult
-    def npmHome = "/usr/share/npm"
+    def npmHome = "/usr/bin/npm"
     //def mavenSettings = "/opt/maven/conf/settings.xml"
 
  
@@ -98,6 +98,7 @@ def call(body){
                 }
 
                 stage("Versioning - creating the package"){
+                    sh "npm install"
                     sh "npm pack"
                 }
 
@@ -142,7 +143,7 @@ def call(body){
                 stage("deleting the artifactory and docker image to keep the space")
                 {
                     sh "docker rmi ${imageTag}"
-                    sh "rm ${ecrRepoName}-${releaseVersion}.tgz"
+                    sh "rm ${ecrRepoName}-*.tgz"
                 }
 
                 stage("Update repo"){
