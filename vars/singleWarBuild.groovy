@@ -98,7 +98,6 @@ def call(body){
                 }
 
                 stage("Versioning - creating the package"){
-                    sh "npm install"
                     sh "npm pack"
                 }
 
